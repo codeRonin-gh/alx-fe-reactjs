@@ -1,17 +1,25 @@
-// src/components/AddTodoForm.jsx
-import React from "react";
+import React, { useState } from "react";
 
-export default function AddTodoForm({ value, onChange, onSubmit }) {
+export default function AddTodoForm({ addTodo }) {
+  const [value, setValue] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!value.trim()) return;
+    addTodo(value);
+    setValue("");
+  };
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleSubmit} data-testid="add-todo-form">
       <input
         type="text"
-        placeholder="Add a new todo"
         value={value}
-        onChange={onChange}
-        aria-label="todo-input"
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Enter a new todo"
+        data-testid="todo-input"
       />
-      <button type="submit">Add</button>
+      <button type="submit" data-testid="add-button">Add</button>
     </form>
   );
 }
