@@ -20,3 +20,11 @@ Features:
 - Fetching posts from JSONPlaceholder API
 - Caching and re-using results
 - Refetching data on demand
+# react-query-demo
+
+Advanced Data Handling with React Query.
+
+This project demonstrates:
+- QueryClient and QueryClientProvider setup in `src/App.jsx`
+- Posts fetching from JSONPlaceholder via `src/components/PostsComponent.jsx`
+- Caching (staleTime, cacheTime) and manual refetch via a button
