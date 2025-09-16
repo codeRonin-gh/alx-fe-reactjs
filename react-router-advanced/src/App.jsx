@@ -1,38 +1,44 @@
 // src/App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
-import ProfileDetails from "./components/ProfileDetails";
-import ProfileSettings from "./components/ProfileSettings";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Post from "./pages/Post";
+import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
-import BlogPost from "./components/BlogPost";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  const isAuthenticated = true; // fake auth, replace with real logic later
+  const { isAuthenticated, logout } = useAuth();
 
   return (
-    <Router>
+    <div>
+      <nav style={{ display: "flex", gap: 12, marginBottom: 12 }}>
+        <Link to="/">Home</Link>
+        <Link to="/profile">Profile</Link>
+        <Link to="/posts/1">Dynamic Post</Link>
+        {isAuthenticated ? (
+          <button onClick={() => logout()}>Logout</button>
+        ) : (
+          <Link to="/login">Login</Link>
+        )}
+      </nav>
+
       <Routes>
         <Route path="/" element={<Home />} />
-
-        {/* Protected Profile Route with Nested Routes */}
+        <Route path="/login" element={<Login />} />
         <Route
           path="/profile/*"
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <ProtectedRoute>
               <Profile />
             </ProtectedRoute>
           }
-        >
-          <Route path="details" element={<ProfileDetails />} />
-          <Route path="settings" element={<ProfileSettings />} />
-        </Route>
-
-        {/* Dynamic Blog Post Route */}
-        <Route path="/blog/:id" element={<BlogPost />} />
+        />
+        <Route path="/posts/:id" element={<Post />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Router>
+    </div>
   );
 }
 
