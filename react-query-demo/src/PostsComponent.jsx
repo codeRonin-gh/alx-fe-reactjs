@@ -1,46 +1,50 @@
+// src/components/PostsComponent.jsx
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
-// Fetch function
 const fetchPosts = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts?_limit=10");
   if (!res.ok) {
     throw new Error("Failed to fetch posts");
   }
   return res.json();
 };
 
-const PostsComponent = () => {
-  // useQuery hook
-  const {
-    data: posts,
-    error,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery("posts", fetchPosts, {
-    staleTime: 5000, // cache validity
-    cacheTime: 1000 * 60 * 5, // cache for 5 mins
+export default function PostsComponent() {
+  const { data, error, isLoading, isError, refetch, isFetching } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+    staleTime: 60_000, // 1 minute
+    cacheTime: 300_000, // 5 minutes
   });
 
   if (isLoading) return <p>Loading posts...</p>;
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isError) return <p style={{ color: "red" }}>Error: {error.message}</p>;
 
   return (
     <div>
-      <button onClick={() => refetch()} style={{ marginBottom: 10 }}>
-        Refetch Posts
+      <button
+        onClick={() => refetch()}
+        disabled={isFetching}
+        style={{
+          marginBottom: 12,
+          padding: "8px 12px",
+          borderRadius: 6,
+          border: "1px solid #ccc",
+          cursor: isFetching ? "not-allowed" : "pointer",
+        }}
+      >
+        {isFetching ? "Refreshing..." : "Refetch Posts"}
       </button>
+
       <ul>
-        {posts.slice(0, 10).map((post) => (
-          <li key={post.id}>
+        {data.map((post) => (
+          <li key={post.id} style={{ marginBottom: 12 }}>
             <strong>{post.title}</strong>
-            <p>{post.body}</p>
+            <p style={{ marginTop: 6 }}>{post.body}</p>
           </li>
         ))}
       </ul>
     </div>
   );
-};
-
-export default PostsComponent;
+}
