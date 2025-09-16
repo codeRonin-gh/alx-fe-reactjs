@@ -1,52 +1,35 @@
 import React, { useState } from "react";
-import AddTodoForm from "./AddTodoForm";
 
 function TodoList() {
-  const [todos, setTodos] = useState([
-    { id: 1, text: "Learn React", completed: false },
-    { id: 2, text: "Build Todo App", completed: true },
-  ]);
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState("");
 
-  const addTodo = (text) => {
-    setTodos([...todos, { id: Date.now(), text, completed: false }]);
+  const handleAdd = () => {
+    if (input.trim() !== "") {
+      setTodos([...todos, input]);
+      setInput("");
+    }
   };
 
-  const toggleTodo = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const handleDelete = (index) => {
+    setTodos(todos.filter((_, i) => i !== index));
   };
 
   return (
     <div>
-      <AddTodoForm addTodo={addTodo} />
-      <ul data-testid="todo-list">
-        {todos.map((todo) => (
-          <li
-            key={todo.id}
-            data-testid="todo-item"
-            onClick={() => toggleTodo(todo.id)}
-            style={{
-              textDecoration: todo.completed ? "line-through" : "none",
-              cursor: "pointer",
-            }}
-          >
-            {todo.text}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteTodo(todo.id);
-              }}
-              data-testid={`delete-${todo.id}`}
-            >
-              Delete
-            </button>
+      <h2>Todo List</h2>
+      <input
+        type="text"
+        placeholder="Enter todo"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={handleAdd}>Add</button>
+      <ul>
+        {todos.map((todo, i) => (
+          <li key={i}>
+            {todo}
+            <button onClick={() => handleDelete(i)}>Delete</button>
           </li>
         ))}
       </ul>
