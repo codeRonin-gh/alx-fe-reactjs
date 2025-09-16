@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import AddTodoForm from "./AddTodoForm";
 
-export default function TodoList() {
+function TodoList() {
   const [todos, setTodos] = useState([
     { id: 1, text: "Learn React", completed: false },
-    { id: 2, text: "Build a Todo App", completed: true },
+    { id: 2, text: "Build Todo App", completed: true },
   ]);
 
   const addTodo = (text) => {
@@ -30,13 +30,12 @@ export default function TodoList() {
         {todos.map((todo) => (
           <li
             key={todo.id}
+            data-testid="todo-item"
             onClick={() => toggleTodo(todo.id)}
             style={{
-              cursor: "pointer",
               textDecoration: todo.completed ? "line-through" : "none",
-              marginBottom: "8px",
+              cursor: "pointer",
             }}
-            data-testid="todo-item"
           >
             {todo.text}
             <button
@@ -45,13 +44,6 @@ export default function TodoList() {
                 deleteTodo(todo.id);
               }}
               data-testid={`delete-${todo.id}`}
-              style={{
-                marginLeft: "10px",
-                color: "white",
-                backgroundColor: "red",
-                border: "none",
-                cursor: "pointer",
-              }}
             >
               Delete
             </button>
@@ -61,3 +53,5 @@ export default function TodoList() {
     </div>
   );
 }
+
+export default TodoList;
