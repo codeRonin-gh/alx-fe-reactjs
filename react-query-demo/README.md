@@ -12,3 +12,11 @@ It includes:
 2. Install dependencies:
    ```bash
    npm install @tanstack/react-query react react-dom
+# React Query Demo
+
+This project demonstrates advanced data handling in React using **React Query**.
+
+Features:
+- Fetching posts from JSONPlaceholder API
+- Caching and re-using results
+- Refetching data on demand
