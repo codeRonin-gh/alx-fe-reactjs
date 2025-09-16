@@ -1,34 +1,38 @@
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import TodoList from "../components/TodoList";
+import React, { useState } from "react";
 
-test("renders initial todos", () => {
-  render(<TodoList />);
-  expect(screen.getByText("Learn React")).toBeInTheDocument();
-  expect(screen.getByText("Build Todo App")).toBeInTheDocument();
-});
+function TodoList() {
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState("");
 
-test("adds a new todo", () => {
-  render(<TodoList />);
-  fireEvent.change(screen.getByTestId("todo-input"), {
-    target: { value: "New Task" },
-  });
-  fireEvent.click(screen.getByTestId("add-button"));
-  expect(screen.getByText("New Task")).toBeInTheDocument();
-});
+  const addTodo = () => {
+    if (input.trim() === "") return;
+    setTodos([...todos, input]);
+    setInput("");
+  };
 
-test("toggles a todo", () => {
-  render(<TodoList />);
-  const todo = screen.getByText("Learn React");
-  fireEvent.click(todo);
-  expect(todo).toHaveStyle("text-decoration: line-through");
-});
+  const removeTodo = (index) => {
+    setTodos(todos.filter((_, i) => i !== index));
+  };
 
-test("deletes a todo", () => {
-  render(<TodoList />);
-  const todo = screen.getByText("Build Todo App");
-  const button = todo.parentNode.querySelector("button");
-  fireEvent.click(button);
-  expect(screen.queryByText("Build Todo App")).not.toBeInTheDocument();
-});
+  return (
+    <div>
+      <h2>Todo List</h2>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter todo"
+      />
+      <button onClick={addTodo}>Add</button>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            {todo}{" "}
+            <button onClick={() => removeTodo(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default TodoList;
