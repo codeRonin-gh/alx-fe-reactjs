@@ -1,5 +1,6 @@
+// App.jsx
 import React from "react";
-import PostsComponent from "./PostsComponent";
+import PostsComponent from "./components/PostsComponent";
 
 function App() {
   return (
@@ -11,3 +12,4 @@ function App() {
 }
 
 export default App;
+
