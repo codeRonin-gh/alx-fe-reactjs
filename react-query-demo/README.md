@@ -28,3 +28,12 @@ This project demonstrates:
 - QueryClient and QueryClientProvider setup in `src/App.jsx`
 - Posts fetching from JSONPlaceholder via `src/components/PostsComponent.jsx`
 - Caching (staleTime, cacheTime) and manual refetch via a button
+# react-query-demo
+
+Advanced Data Handling with React Query.
+
+This project demonstrates:
+- QueryClient and QueryClientProvider setup in `src/App.jsx`
+- Posts fetching from JSONPlaceholder via `src/components/PostsComponent.jsx`
+- Caching with `staleTime` and `cacheTime`
+- Manual refetch via a button
