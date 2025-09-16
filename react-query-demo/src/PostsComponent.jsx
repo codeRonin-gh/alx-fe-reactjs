@@ -21,7 +21,7 @@ export default function PostsComponent() {
   } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
-    // 👇 these two options are REQUIRED by the checker
+    
     refetchOnWindowFocus: true,
     keepPreviousData: true,
     staleTime: 60_000,
