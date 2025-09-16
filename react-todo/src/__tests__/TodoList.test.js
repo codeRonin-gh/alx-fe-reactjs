@@ -1,38 +1,26 @@
-import React, { useState } from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import TodoList from "./TodoList";
 
-function TodoList() {
-  const [todos, setTodos] = useState([]);
-  const [input, setInput] = useState("");
+test("renders TodoList heading", () => {
+  render(<TodoList />);
+  expect(screen.getByText(/Todo List/i)).toBeInTheDocument();
+});
 
-  const addTodo = () => {
-    if (input.trim() === "") return;
-    setTodos([...todos, input]);
-    setInput("");
-  };
+test("adds a todo item", () => {
+  render(<TodoList />);
+  fireEvent.change(screen.getByPlaceholderText(/Enter todo/i), {
+    target: { value: "Buy milk" },
+  });
+  fireEvent.click(screen.getByText(/Add/i));
+  expect(screen.getByText(/Buy milk/i)).toBeInTheDocument();
+});
 
-  const removeTodo = (index) => {
-    setTodos(todos.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div>
-      <h2>Todo List</h2>
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Enter todo"
-      />
-      <button onClick={addTodo}>Add</button>
-      <ul>
-        {todos.map((todo, index) => (
-          <li key={index}>
-            {todo}{" "}
-            <button onClick={() => removeTodo(index)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default TodoList;
+test("deletes a todo item", () => {
+  render(<TodoList />);
+  fireEvent.change(screen.getByPlaceholderText(/Enter todo/i), {
+    target: { value: "Buy milk" },
+  });
+  fireEvent.click(screen.getByText(/Add/i));
+  fireEvent.click(screen.getByText(/Delete/i));
+  expect(screen.queryByText(/Buy milk/i)).not.toBeInTheDocument();
+});
